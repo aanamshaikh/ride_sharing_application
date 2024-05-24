@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"ride_sharing_application/ride"
 	"ride_sharing_application/user"
 	"ride_sharing_application/vehicle"
 )
@@ -11,6 +12,7 @@ import (
 func main() {
 	um := user.NewUserManager()
 	vm := vehicle.NewVehicleManager(um)
+	rm := ride.NewRideManager(um, vm)
 
 	um.AddUser("Rohan", "M", 24)
 	um.AddUser("Shashank", "M", 29)
@@ -71,4 +73,131 @@ func main() {
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
+
+	// Offer rides
+	err = rm.OfferRide("Rohan", "Hyderabad", "Bangalore", "Swift", "KA-01-12345", 1)
+	if err != nil {
+		fmt.Println("Error offering ride for Rohan:", err)
+	}
+
+	err = rm.OfferRide("Shipra", "Bangalore", "Mysore", "Activa", "KA-12-12245", 1)
+	if err != nil {
+		fmt.Println("Error offering ride for Shipra (Activa):", err)
+	}
+
+	err = rm.OfferRide("Shipra", "Bangalore", "Mysore", "Polo", "KA-05-19845", 2)
+	if err != nil {
+		fmt.Println("Error offering ride for Shipra (Polo):", err)
+	}
+
+	err = rm.OfferRide("Shashank", "Hyderabad", "Bangalore", "Baleno", "TS-04-22345", 2)
+	if err != nil {
+		fmt.Println("Error offering ride for Shashank:", err)
+	}
+
+	err = rm.OfferRide("Rahul", "Hyderabad", "Bangalore", "XUV", "TS-10-22895", 5)
+	if err != nil {
+		fmt.Println("Error offering ride for Rahul:", err)
+	}
+
+	err = rm.OfferRide("Rohan", "Bangalore", "Pune", "Swift", "KA-01-12345", 1)
+	if err != nil {
+		fmt.Println("Error offering ride for Rohan (Bangalore to Pune):", err)
+	}
+
+	err = rm.OfferRide("Rahul", "Hyderabad", "Bangalore", "XUV", "TS-10-22895", 5)
+	if err != nil {
+		fmt.Println("Error offering ride for Rahul:", err)
+	}
+
+	err = rm.OfferRide("Rohan", "Bangalore", "Pune", "Swift", "KA-01-12345", 1)
+	if err != nil {
+		fmt.Println("Error offering ride for Rohan (Bangalore to Pune):", err)
+	}
+
+	err = rm.OfferRide("Armaan", "Mumbai", "karjat", "Polo", "KA-05-19088", 1)
+	if err != nil {
+		fmt.Println("Error offering ride for Rohan (Bangalore to Pune):", err)
+	}
+
+	err = rm.OfferRide("Shawn", "Karjat", "Lonavala", "WagonR", "KA-01-10005", 1)
+	if err != nil {
+		fmt.Println("Error offering ride for Rohan (Bangalore to Pune):", err)
+	}
+
+	fmt.Println("Select Ride")
+	//  Select rides
+	ride, err := rm.SelectRide("Nandini", "Bangalore", "Mysore", 1, "Most Vacant")
+	if err != nil {
+		fmt.Println("Error selecting ride for Nandini:", err)
+	} else {
+		fmt.Printf("Ride selected for Nandini: %+v\n", ride)
+	}
+
+	ride, err = rm.SelectRide("Gaurav", "Bangalore", "Mysore", 1, "Activa")
+	if err != nil {
+		fmt.Println("Error selecting ride for Gaurav:", err)
+	} else {
+		fmt.Printf("Ride selected for Gaurav: %+v\n", ride)
+	}
+
+	ride, err = rm.SelectRide("Shashank", "Mumbai", "Bangalore", 1, "Most Vacant")
+	if err != nil {
+		fmt.Println("Error selecting ride for Shashank:", err)
+	} else {
+		fmt.Printf("Ride selected for Shashank: %+v\n", ride)
+	}
+
+	ride, err = rm.SelectRide("Rohan", "Hyderabad", "Bangalore", 1, "Baleno")
+	if err != nil {
+		fmt.Println("Error selecting ride for Rohan:", err)
+	} else {
+		fmt.Printf("Ride selected for Rohan: %+v\n", ride)
+	}
+
+	ride, err = rm.SelectRide("Shashank", "Hyderabad", "Bangalore", 1, "Polo")
+	if err != nil {
+		fmt.Println("Error selecting ride for Shashank:", err)
+	} else {
+		fmt.Printf("Ride selected for Shashank: %+v\n", ride)
+	}
+
+	ride, err = rm.SelectRide("Tina", "Mumbai", "Lonavala", 1, "")
+	if err != nil {
+		fmt.Println("Error selecting ride for Shashank:", err)
+	} else {
+		fmt.Printf("Ride selected for Tina: %+v\n", ride)
+	}
+
+	// End rides
+	fmt.Println("End Rides")
+
+	err = rm.EndRide("Rohan:KA-01-12345")
+	if err != nil {
+		fmt.Println("Error ending ride for Rohan:", err)
+	}
+
+	ride, err = rm.GetRide("Rohan:KA-01-12345")
+	if err != nil {
+		fmt.Println("Error getting ride:", err)
+	} else {
+		fmt.Printf("Details of ride %s: %+v\n", "Rohan:KA-01-12345", ride)
+	}
+
+	err = rm.EndRide("Shipra:KA-12-12245")
+	if err != nil {
+		fmt.Println("Error ending ride for Shipra (Activa):", err)
+	}
+
+	err = rm.EndRide("Shipra:KA-05-19845")
+	if err != nil {
+		fmt.Println("Error ending ride for Shipra (Polo):", err)
+	}
+
+	err = rm.EndRide("Shashank:TS-04-22345")
+	if err != nil {
+		fmt.Println("Error ending ride for Shashank:", err)
+	}
+
+	rm.PrintRideStats()
 }
